@@ -61,6 +61,7 @@
   ];
    
   $('.card-link').click(function () {
+    alert('我要送訊息了');
                 liff.sendMessages([
                  {
                      type: 'text',
@@ -68,7 +69,7 @@
                  }
                 ])
                .then(() => {
-                   alert('done');
+                   alert('送好了');
                })
             });
    });
