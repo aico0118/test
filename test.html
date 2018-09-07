@@ -75,6 +75,7 @@
                .then(() => {
                    alert('送好了');
                }).catch((err) => {
+                  alert('有錯啊');
                   $('#error-msg').style('display','flex');
                   document.getElementById("error-msg").innerHTML = JSON.stringify(err);
                   console.log('error', err);
