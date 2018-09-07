@@ -10,12 +10,12 @@
 <script>$(window).on('load', function () {
   liff.init(function (data) {
     //document.getElementById("test").innerHTML = JSON.stringify(data);
-
-  });
    document.getElementById("test").innerHTML = data.getProfile().then(profile=>{
       document.getElementById("test").innerHTML = JSON.stringify(profile);
 
    });
+  });
+
 });
 //# sourceURL=pen.js
 </script>
