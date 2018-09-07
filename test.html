@@ -43,6 +43,25 @@
       document.getElementById("user-desc").innerHTML = profile.statusMessage;
       document.getElementById("user-id").innerHTML = profile.userId;
       $('#user-img').attr('src',profile.pictureUrl);
+      let msg = "quickReply": {
+  "items": [
+    {
+      "type": "action",
+      "action": {
+        "type": "cameraRoll",
+        "label": "Send photo"
+      }
+    },
+    {
+      "type": "action",
+      "action": {
+        "type": "camera",
+        "label": "Open camera"
+      }
+    }
+  ]
+};
+      liff.sendMessages(msg);
    });
   });
 
