@@ -59,14 +59,23 @@
       }
     }
   ];
-      liff.sendMessages(msg);
+   
+  $('.card-link').click(function () {
+                liff.sendMessages([
+                 {
+                     type: 'text',
+                     text: profile.displayName
+                 }
+                ])
+               .then(() => {
+                   alert('done');
+               })
+            });
    });
   });
 
 });
-  $('.card-link').on('Click',function(){
-   window.clipboardData.setData('Text','資料資料資料');
-});
+
 //# sourceURL=pen.js
 </script>
 </body>
