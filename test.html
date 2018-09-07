@@ -43,7 +43,7 @@
       document.getElementById("user-desc").innerHTML = profile.statusMessage;
       document.getElementById("user-id").innerHTML = profile.userId;
       $('#user-img').attr('src',profile.pictureUrl);
-      let msg = "quickReply": {
+      let msg ={ "quickReply": {
   "items": [
     {
       "type": "action",
@@ -60,11 +60,14 @@
       }
     }
   ]
-};
+}};
       liff.sendMessages(msg);
    });
   });
 
+});
+  $('.card-link').on('Click',function(){
+   window.clipboardData.setData('Text','資料資料資料');
 });
 //# sourceURL=pen.js
 </script>
