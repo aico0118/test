@@ -33,7 +33,7 @@
     </div>
       
   </div>
-  <div class="alert alert-danger d-flex justify-content-center mx-auto mt-3" role="alert" style="width: 18rem; d-flex justify-content-center">
+  <div id="error-msg" class="alert alert-danger d-flex justify-content-center mx-auto mt-3" role="alert" style="width: 18rem; d-none justify-content-center">
   This is a danger alert—check it out!
 </div>
 </div>
@@ -74,7 +74,11 @@
                 ])
                .then(() => {
                    alert('送好了');
-               })
+               }).catch((err) => {
+                  $('#error-msg').style('display','flex');
+                  document.getElementById("error-msg").innerHTML = JSON.stringify(err);
+                  console.log('error', err);
+              });
             });
    });
   });
