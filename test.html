@@ -76,7 +76,8 @@
                    alert('送好了');
                }).catch((err) => {
                   alert('有錯啊');
-                  $('#error-msg').css('display','flex');
+                   $('#error-msg').addClass('d-flex');
+                   $('#error-msg').removeClass('d-none');
                   document.getElementById("error-msg").innerHTML = JSON.stringify(err);
                   console.log('error', err);
               });
