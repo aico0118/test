@@ -9,10 +9,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 <script>$(window).on('load', function () {
   liff.init(function (data) {
-    document.getElementById("test").innerHTML = JSON.stringify(data);
+    //document.getElementById("test").innerHTML = JSON.stringify(data);
 
   });
-   document.getElementById("test").innerHTML = '測試';
+   document.getElementById("test").innerHTML = data.getProfile().then(profile=>{
+      document.getElementById("test").innerHTML = JSON.stringify(profile);
+
+   });
 });
 //# sourceURL=pen.js
 </script>
