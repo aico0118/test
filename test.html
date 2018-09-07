@@ -10,7 +10,7 @@
 <script>$(window).on('load', function () {
   liff.init(function (data) {
     //document.getElementById("test").innerHTML = JSON.stringify(data);
- data.getProfile().then(profile=>{
+ liff.getProfile().then(profile=>{
       document.getElementById("test").innerHTML = JSON.stringify(profile);
 
    });
