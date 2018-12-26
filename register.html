@@ -84,15 +84,10 @@
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-sm-6">
-                                            <div><label>性別</label></div>
-                                            <div class="form-check form-check-inline">
-                                                <input type="radio" class="form-check-input" name="GENDER_CODE" id="radio-gender-female" value="1" checked>
-                                                <label class="form-check-label" for="radio-gender-female">女</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input type="radio" class="form-check-input" name="GENDER_CODE" id="radio-gender-male" value="0">
-                                                <label class="form-check-label" for="radio-gender-male">男</label>
-                                            </div>
+                                            <label for="input-phone" class="required-field">行動電話</label>
+                                            <input type="text" class="form-control" name="CELLPHONE_NUMBER" id="input-phone" placeholder="請輸入您的行動電話" value="" pattern="^09([0-9]{8})$" required>
+                                            <div class="empty-feedback">欄位必填</div>
+                                            <div class="invalid-feedback">格式錯誤</div>
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <label for="input-birthday" class="required-field">生日<small>(yyyy/mm/dd)</small></label>
@@ -102,11 +97,16 @@
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="form-group col-sm-6">
-                                            <label for="input-phone" class="required-field">行動電話</label>
-                                            <input type="text" class="form-control" name="CELLPHONE_NUMBER" id="input-phone" placeholder="請輸入您的行動電話" value="" pattern="^09([0-9]{8})$" required>
-                                            <div class="empty-feedback">欄位必填</div>
-                                            <div class="invalid-feedback">格式錯誤</div>
+                                            <div class="form-group col-sm-6">
+                                            <div><label>性別</label></div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" class="form-check-input" name="GENDER_CODE" id="radio-gender-female" value="1" checked>
+                                                <label class="form-check-label" for="radio-gender-female">女</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" class="form-check-input" name="GENDER_CODE" id="radio-gender-male" value="0">
+                                                <label class="form-check-label" for="radio-gender-male">男</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
