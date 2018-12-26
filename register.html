@@ -5,12 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   </head>
+<style>
+.required-field:after {
+    content: "\002a";
+    color: #dc3545;
+    margin-left: 2px;
+}
+
+.empty-feedback {
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+.empty-feedback {
+    display: none;
+}
+
+.form-group.empty .empty-feedback,
+.form-group.invalid .invalid-feedback,
+.form-check.empty .empty-feedback {
+    display: block;
+}
+
+.form-group.empty .form-control,
+.form-group.invalid .form-control {
+    border-color: #dc3545;
+}
+
+.form-check.empty label {
+    color: #dc3545;
+}
+
+.form-check.empty label a {
+    text-decoration: underline;
+}</style>
 <body>
   <!-- 追加 -->
   <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
@@ -28,7 +62,7 @@
                                             <div class="empty-feedback">欄位必填</div>
                                         </div>
                                         <div class="form-group col-sm-6">
-                                            <label for="input-email" class="required-field">電子信箱（此信箱將成為你的登入帳號）</label>
+                                            <label for="input-email" class="required-field">電子信箱</label>
                                             <input type="email" class="form-control" name="EMAIL_ADDRESS" id="input-email" placeholder="請輸入您的 e-mail" value="" pattern="([\w\-]+\@[\w\-]+\.[\w\-]+)" required>
                                             <div class="empty-feedback">欄位必填</div>
                                             <div class="invalid-feedback">格式錯誤</div>
@@ -115,7 +149,157 @@
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-<script>$(window).on('load', function () {
+<script>
+	(function ($) {
+
+    $.fn.validation = function (options) {
+        var options = options || false;
+
+        // check for required fields
+        var checkRequired = function (els) {
+            // console.log("check required fields");
+            // if the field is empty or is not checked,
+            // add "empty" class to its parent container
+            var emptyEls = [];
+            els.each(function () {
+                var el = $(this);
+                if (el.attr("type") === "checkbox") {
+                    if (!el.prop("checked")) {
+                        el.closest(".form-check").addClass("empty");
+                        emptyEls.push(el);
+                    }
+                } else {
+                    if (!el.val()) {
+                        el.closest(".form-group").addClass("empty");
+                        emptyEls.push(el);
+                    }
+                }
+            });
+            return emptyEls.length;
+        };
+
+        var checkPattern = function (els) {
+            // console.log("check pattern");
+            var invalidEls = [];
+            els.each(function () {
+                // get value
+                var el = $(this);
+                var str = el.val();
+                if (str) {
+                    // get pattern from "pattern" attribute
+                    var pattern = new RegExp(el.attr("pattern"));
+                    // console.log(pattern);
+                    // match input value with pattern
+                    var match = str.match(pattern);
+                    // console.log(match);
+                    if (!match) {
+                        // if the field doesn't match against pattern
+                        // add "invalid" class
+                        var parent = el.closest(".form-group");
+                        if (!parent.hasClass("empty")) {
+                            parent.addClass("invalid");
+                            invalidEls.push(el);
+                        }
+                    }
+                }
+            });
+            return invalidEls.length;
+        };
+
+        var verifyPassword = function (passwordEl, confirmEl) {
+            var unverifiedPassword = true;
+            var passwordVal = passwordEl.val();
+            // console.log('passwordVal: ', passwordVal);
+            var passwordConfirmVal = confirmEl.val();
+
+            if (passwordVal && passwordVal !== passwordConfirmVal) {
+                var formGroup = confirmEl.closest(".form-group");
+                if (!formGroup.hasClass("empty")) {
+                    formGroup.addClass("invalid");
+                }
+            } else {
+                // passwords do match
+                unverifiedPassword = false;
+            }
+            // console.log('unverifiedPassword: ', unverifiedPassword);
+            return unverifiedPassword;
+        };
+
+        var handleValidate = function (form) {
+            var validate = false;
+            var invalidFields = 0;
+
+            // remove previous feedback messages
+            form.find(".empty").removeClass("empty");
+            form.find(".invalid").removeClass("invalid");
+
+            // check required fields
+            var requiredFields = form.find("[required]");
+            // console.log(requiredFields.length);
+            if (requiredFields.length > 0) {
+                invalidFields = invalidFields + checkRequired(requiredFields);
+                // console.log('invalidRequiredFields: ', invalidFields);
+            }
+
+            // check field value match with given RegEx pattern
+            var fieldsWithPattern = form.find("[pattern]");
+            if (fieldsWithPattern.length > 0) {
+                invalidFields = invalidFields + checkPattern(fieldsWithPattern);
+                // console.log('invalidPatternFields: ', invalidFields);
+            }
+
+            // check matching password fields
+            var passwordField = form.find("#password");
+            var passwordConfirmField = form.find("#password-confirm");
+            if (passwordField.length > 0 && passwordConfirmField.length > 0) {
+                invalidFields = invalidFields + verifyPassword(passwordField, passwordConfirmField);
+                // console.log('invalidPasswordFields: ', invalidFields);
+            }
+
+            // check #twzipcode fields
+            // https://code.essoduke.org/twzipcode/
+            var twZipCode = form.find("#twzipcode");
+            if (twZipCode.length > 0) {
+                twZipCode.twzipcode('get', function (county, district, zipcode) {
+                    if (!county || !district || !zipcode) {
+                        invalidFields++;
+                        var formGroup = twZipCode.closest(".form-group");
+                        if (!formGroup.hasClass("empty")) {
+                            formGroup.addClass("empty");
+                        }
+                    }
+                });
+            }
+
+            // if all fields are valid, change validation variable to true
+            if (invalidFields === 0) {
+                validate = true;
+            }
+            // console.log('validate: ', validate);
+
+            return validate;
+        };
+
+
+        this.on("submit", function (event) {
+
+            var validate = handleValidate($(this));
+            // console.log('validate: ', validate);
+
+            // Stop form from submitting if invalid
+            if (!validate) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+        });
+
+        return this;
+    };
+
+})(jQuery);
+	
+	$(window).on('load', function () {
   liff.init(function (data) {
     //document.getElementById("test").innerHTML = JSON.stringify(data);
  liff.getProfile().then(profile=>{
