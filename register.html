@@ -299,6 +299,27 @@
 
 })(jQuery);
 	
+	
+	
+	      $(function(){
+                $('[data-toggle="datepicker"]').datepicker({
+                    format: 'yyyy/mm/dd',
+                    language: 'zh-TW'
+                });
+                $('#twzipcode').twzipcode({
+                    readonly: true
+                });
+
+                $("form").validation().on("submit", function(event){
+                    if (event.isDefaultPrevented()) {
+                        $(".modal-body p").text("加入會員失敗，請檢查「*」必填欄位是否都已完成填妥！");
+                        $(".modal").modal("show");
+                    }
+                });;
+            });
+
+	
+	
 	$(window).on('load', function () {
   liff.init(function (data) {
     //document.getElementById("test").innerHTML = JSON.stringify(data);
